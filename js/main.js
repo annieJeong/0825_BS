@@ -38,17 +38,34 @@ function feeCheck(){
     var radio = document.getElementsByName("check");
 
     if (radio[0].checked == true){
-        var Fee = (1000000 * NumAdult) + (800000 * NumChild) + (500000 * NumBaby);
+        var radioFee = 932000;
+        var chkFee = (radioFee*(NumAdult+NumChild)) + ((radioFee*0.2)*NumBaby);
+       // var Fee = (1000000 * NumAdult) + (800000 * NumChild) + (500000 * NumBaby);
     }else if (radio[1].checked == true){
-        var Fee = (800000 * NumAdult) + (700000 * NumChild) + (400000 * NumBaby);
+        var radioFee = 525000;
+        var chkFee = (radioFee*(NumAdult+NumChild)) + ((radioFee*0.2)*NumBaby);
     }else if (radio[2].checked == true){
-        var Fee = (900000 * NumAdult) + (750000 * NumChild) + (450000 * NumBaby);
-    }else{
-        var Fee = "noChecked";
+        var radioFee = 1103350;
+        var chkFee = (radioFee*(NumAdult+NumChild)) + ((radioFee*0.2)*NumBaby);
     }
-    console.log(Fee);
-    document.getElementById("fee").innerHTML = Fee;
+    var tax = chkFee * 1.05;
+    document.getElementById("result").innerHTML = tax.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+function pushRadio(){
+    var radio = document.getElementsByName("check");
+    if (radio[0].checked){
+        var radioFee = 932000;
+    }else if (radio[1].checked){
+        var radioFee = 525000;
+    }else if (radio[2].checked){
+        var radioFee = 1103350;
+    }else {
+        var radioFee="Check Please";
+    }
+    console.log(radioFee);
+    document.getElementById("fee").innerHTML = radioFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 /*
 function exvar(){
     var a= 5;
@@ -100,4 +117,9 @@ function isNumber(param){
     }else{
         return false;
     }
+}
+
+//1-6 정수
+function getDiceNumber(){
+    var r = Math.floor(Math.random()*6+1);
 }
