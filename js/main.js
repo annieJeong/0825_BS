@@ -1,125 +1,94 @@
 /**
  * Created by kosta on 2016-08-24.
  */
-function changefont(){
-    document.getElementById("demo").style.fontSize="40px";
-    window.alert("hello, world!");
-    document.write("<h1>document.write 실행</h1>");
-    console.log('hello world');
-}
-function doCalc(){
-    //text box에 적힌 value가져오기
-    var num1 = document.getElementById("num1").value;
-    var num2 = document.getElementById("num2").value;
 
-    //두 수를 더한 결과. 현재 변수는 string
-    //string >> integer
-    var result = parseInt(num1) + parseInt(num2);
+$(document).ready(function(){
 
-    //result -> span tag
-    document.getElementById("result").innerHTML = result;
+    var flightFee = {
+        la: 935000,
+        bangkok: 570000,
+        sydney: 1250000
+    };
 
+    var currentDest = "";
+    initPage();
 
-}
+    $('#testBtn').on('click', function (e) {
+        $('.form-group').first().toggle();
+    });
 
-function CtoF(){
-    var numC = document.getElementById("numC").value;
-    var num1 = parseInt(numC);
-    var result = ( num1 * 1.8 )+32;
+    $(':radio').on('click', function (e) {
+        //currentDest = e.target.value;
+        currentDest = $(this).val();
+        displayFlightFee(currentDest);
+    });
+    $('#calcBtn').on('click', function(e){
+        $('.container').find('div').last().toggleClass('bg-yellow');
+        calcFlightFee();
 
-    document.getElementById("result").innerHTML = result;
-}
+        $('.jumbotron').fadeToggle;
+    });
+    /*
+    $('.row').first().on('click','button',function(){
+        $('.container').find('div').last().toggleClass('bg-yellow');
+        calcFlightFee();
 
-function feeCheck(){
-    var NumAdult = parseInt(document.getElementById("sel1").value);
-    var NumChild = parseInt(document.getElementById("sel2").value);
-    var NumBaby = parseInt(document.getElementById("sel3").value);
-
-    var radio = document.getElementsByName("check");
-
-    if (radio[0].checked == true){
-        var radioFee = 932000;
-        var chkFee = (radioFee*(NumAdult+NumChild)) + ((radioFee*0.2)*NumBaby);
-       // var Fee = (1000000 * NumAdult) + (800000 * NumChild) + (500000 * NumBaby);
-    }else if (radio[1].checked == true){
-        var radioFee = 525000;
-        var chkFee = (radioFee*(NumAdult+NumChild)) + ((radioFee*0.2)*NumBaby);
-    }else if (radio[2].checked == true){
-        var radioFee = 1103350;
-        var chkFee = (radioFee*(NumAdult+NumChild)) + ((radioFee*0.2)*NumBaby);
-    }
-    var tax = chkFee * 1.05;
-    document.getElementById("result").innerHTML = tax.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-function pushRadio(){
-    var radio = document.getElementsByName("check");
-    if (radio[0].checked){
-        var radioFee = 932000;
-    }else if (radio[1].checked){
-        var radioFee = 525000;
-    }else if (radio[2].checked){
-        var radioFee = 1103350;
-    }else {
-        var radioFee="Check Please";
-    }
-    console.log(radioFee);
-    document.getElementById("fee").innerHTML = radioFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
-/*
-function exvar(){
-    var a= 5;
-    var b = 'acb';
-    var c = new Date();
-    var d = [1,2,3,4,5];
-    var obj = {
-        a : "1",
-        b : "2",
-        c : "3"
-    }; //javascript object notation --> JSON
-    var aa = {
-        av: "tt",
-        bv: 10.6,
-        cv: [1,2,3,4,5],
-        drive: function(){
-            return 10;
-            console.log("function in var")
-        }
-    }
-    var type = aa.drive();
-    console.log(type);
-}*/
-
-function doValidate(){
-    var passwd = document.getElementById("pwd").value;
-
-    //1. very strong 8자이상 숫자 문자 특수문자
-    //2. strong 8자이상 숫자 문자
-    //3. weak 8자 이상 숫자
-    //4. very weak 8자 미만
-var result ="";
-    if ( passwd.length < 8){
-        result =  "very weak";
-    }else{
-        if(isNumber(passwd)){
-            result= "weak";
-        }
-
+        $('.jumbotron').fadeToggle;
+    });
+*/
+    function dpFlightFeeToBadge(city) {
+        var fee = flightFee[city];
+        fee = fee.toLocaleString("en").split(".")[0];
+        fee += "원";
+        $("#fee").html(fee);
     }
 
-    document.getElementById("result").innerHTML=result;
-}
-
-function isNumber(param){
-    var toInt = parseInt(param);
-    if(toInt !== NaN && toInt > 9999999){
-        return true;
-    }else{
-        return false;
+    /*
+     페이지가 로딩되면 수행되는 함수
+     1.LA를 선택하고 LA의 비행기값을 배지에 출력한다.
+     */
+    function initPage() {
+        dpFlightFeeToBadge('la');
+        currentDest = "la";
     }
-}
 
-//1-6 정수
-function getDiceNumber(){
-    var r = Math.floor(Math.random()*6+1);
-}
+    /*
+     라디오 버튼이 클릭될 때 마다 배지에 비행기값을 출력한다.
+     */
+    function displayFlightFee(city) {
+        dpFlightFeeToBadge(city);
+        currentDest = city;
+    }
+
+    /*
+     성인,소아 요금 100%, 유아는 20%적용
+     세금 5% 추가
+     */
+    function calcFlightFee() {
+        //1. 셀렉트박스에서 인원을 확보, 목적지 데이터를 확보
+        var howManyAdult = $("#sel1").val();
+        var howManyKid = $("#sel2").val();
+        var howManyInfant = $("#sel3").val();
+
+        var flightFeeNumber = flightFee[currentDest];
+
+        //2. 성인(소아)의 항공료를 계산
+        var howManyAdultAndKid =
+            parseInt(howManyAdult) + parseInt(howManyKid);
+
+        var adultFeeSubtotal = howManyAdultAndKid * flightFeeNumber;
+        var infantFeeSubtotal =
+            Math.floor((parseInt(howManyInfant) * flightFeeNumber) * 0.2);
+
+        var grandTotal = (adultFeeSubtotal + infantFeeSubtotal) * 1.05;
+        //formatting grandTotal
+        grandTotal = grandTotal.toLocaleString("en").split(".")[0];
+
+        //3. 최종금액 표기
+        //$("#result").html(grandTotal);
+        var grandTotalElement = $('<span>' + grandTotal + '원</span>');
+        $('.panel').find('span').last().remove();
+        $('.panel').append(grandTotalElement);
+    }
+
+});

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/main.css">
 
 </head>
-<body onload="pushRadio()">
+<body>
     <div class="container">
         <div class="page-header">
             <h1>항공요금 계산기</h1>
@@ -59,17 +59,17 @@
             <label class="col-sm-1 control-label">목적지:</label>
             <span class="col-sm-9">
                 <div class="radio-inline col-sm-3 dest">
-                    <label onclick="pushRadio()"><input type="radio" name="check" value="NewYork" checked>LosAngeles</label>
+                    <label><input type="radio" name="check" value="la" checked>LosAngeles</label>
                 </div>
                 <div class="radio-inline col-sm-3 dest">
-                    <label onclick="pushRadio()"><input type="radio" name="check" value="BangKok">Bangkok</label>
+                    <label><input type="radio" name="check" value="bangkok">Bangkok</label>
                 </div>
                 <div class="radio-inline col-sm-3 dest">
-                    <label onclick="pushRadio()"><input type="radio" name="check" value="Sydney">Sydney</label>
+                    <label><input type="radio" name="check" value="sydney">Sydney</label>
                 </div>
             </span>
             <span class="col-sm-1">
-                <button class="btn btn-primary" onclick="feeCheck()">계산하기</button>
+                <button type="button" id="calcBtn" class="btn btn-primary">계산하기</button>
             </span>
         </div>
         <!-- 계산버튼 -->
@@ -78,12 +78,16 @@
             <span id="fee" class="badge dest">가격</span>
         </div>
 
+        <div class="panel text-center">
+            <span>최종가격 :</span>
+            <span>원</span>
+        </div>
+
         <div class="jumbotron text-center">
-            <label for="result" class="control-label">세금포함액:</label>
-            <span id="result" class="well-lg"></span>
-            <label for="result">원</label>
+            <button id="testBtn" class="btn btn-info btn-lg">테스트버튼</button>
         </div>
     </div>
     <script src="js/main.js"></script>
 </body>
 </html>
+
